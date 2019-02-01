@@ -1,5 +1,5 @@
 from django.db import models
-from uuid import uuid5
+from uuid import uuid4
 from django.conf import settings
 
 TODO_STATUS = [
@@ -10,7 +10,8 @@ TODO_STATUS = [
 
 
 class Todo(models.Model):
-    id = models.UUIDField(default=uuid5, primary_key=True)
+    id = models.UUIDField(default=uuid4, primary_key=True,
+                          editable=False, verbose_name="ID")
     title = models.CharField(max_length=255, db_index=True)
     body = models.TextField(null=True, blank=True)
     status = models.CharField(
