@@ -1,7 +1,7 @@
 from django.db import models
 from uuid import uuid4
 from django.conf import settings
-from .signals import CHANGE_TODO_STATUS
+from .signals import CHANGE_TODO_STATUS, ASSIGN_TASK_TO_USER
 
 TODO_STATUS = [
     ('TODO', "Todo"),
@@ -33,3 +33,6 @@ class Todo(models.Model):
 
     def done(self):
         CHANGE_TODO_STATUS.send(sender=self, todo_pk=self.pk, status='DONE')
+
+    def assign(self, user):
+        ASSIGN_TASK_TO_USER.send(sender=self, todo_pk=self.pk, user=user)

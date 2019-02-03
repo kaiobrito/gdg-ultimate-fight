@@ -4,7 +4,6 @@ from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .serializers import TodoSerializer, AssignSerializer
-from .signals import ASSIGN_TASK_TO_USER
 
 
 class TodoViewSet(ModelViewSet):
@@ -15,7 +14,7 @@ class TodoViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         todo = serializer.save()
-        ASSIGN_TASK_TO_USER.send(self, todo_pk=todo.pk, user=self.request.user)
+        todo.assign(self.request.user)
 
     @action(detail=True, methods=['post'], name='Mark it as todo', serializer_class=Serializer)
     def todo(self, request, pk):
@@ -41,5 +40,5 @@ class TodoViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = User.objects.get(pk=serializer.data.get('user'))
-        ASSIGN_TASK_TO_USER.send(self, todo_pk=todo.pk, user=user)
+        todo.assign(user)
         return Response(status=201)
