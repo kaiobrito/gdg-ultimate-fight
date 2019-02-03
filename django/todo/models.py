@@ -4,7 +4,7 @@ from django.conf import settings
 from .signals import CHANGE_TODO_STATUS
 
 TODO_STATUS = [
-    ('TODO', "todo"),
+    ('TODO', "Todo"),
     ('DOING', "Doing"),
     ('DONE', "Done"),
 ]
