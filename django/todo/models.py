@@ -1,6 +1,7 @@
 from django.db import models
 from uuid import uuid4
 from django.conf import settings
+from .signals import CHANGE_TODO_STATUS
 
 TODO_STATUS = [
     ('TODO', "todo"),
@@ -23,3 +24,12 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.title
+
+    def todo(self):
+        CHANGE_TODO_STATUS.send(sender=self, todo_pk=self.pk, status='TODO')
+
+    def doing(self):
+        CHANGE_TODO_STATUS.send(sender=self, todo_pk=self.pk, status='DOING')
+
+    def done(self):
+        CHANGE_TODO_STATUS.send(sender=self, todo_pk=self.pk, status='DONE')
