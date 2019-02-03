@@ -11,19 +11,19 @@ class TodoViewSet(ModelViewSet):
     def get_queryset(self):
         return self.request.user.todos.all()
 
-    @action(detail=True, methods=['post'], name='Mark it as todo', serializer_class=Serializer())
+    @action(detail=True, methods=['post'], name='Mark it as todo', serializer_class=Serializer)
     def todo(self, request, pk):
         todo = self.get_queryset().get(pk=pk)
         todo.todo()
         return Response(status=204)
 
-    @action(detail=True, methods=['post'], name='Mark it as doing', serializer_class=Serializer())
+    @action(detail=True, methods=['post'], name='Mark it as doing', serializer_class=Serializer)
     def doing(self, request, pk):
         todo = self.get_queryset().get(pk=pk)
         todo.doing()
         return Response(status=204)
 
-    @action(detail=True, methods=['post'], name='Mark todo as done', serializer_class=Serializer())
+    @action(detail=True, methods=['post'], name='Mark todo as done', serializer_class=Serializer)
     def done(self, request, pk):
         todo = self.get_queryset().get(pk=pk)
         todo.done()
