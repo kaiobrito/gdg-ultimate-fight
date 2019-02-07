@@ -15,12 +15,12 @@ services:
     volumes:
       - .:/code/
     ports:
-      - 8000:8000
+      - 8080:8000
     env_file:
       - .env
     depends_on:
       - db
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
 networks:
   db_network:

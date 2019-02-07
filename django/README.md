@@ -5,8 +5,11 @@
 ### Using docker
 
 ```
+
+# Run this on the very first time
+# docker volume create --name=db_volume
+
 docker-compose up
-docker-compose
 ```
 
 ### Using Pipenv
@@ -18,3 +21,5 @@ pipenv sync
 pipenv run ./manage.py migrate
 pipenv run ./manage.py runserver
 ```
+
+# DO NOT RUN THIS CODE IN PRODUCTION

@@ -1,0 +1,17 @@
+-i https://pypi.org/simple
+certifi==2018.11.29
+chardet==3.0.4
+coreapi==2.3.3
+coreschema==0.0.4
+django-filter==2.1.0
+django==2.1.5
+djangorestframework==3.9.1
+idna==2.8
+itypes==1.1.0
+jinja2==2.10
+markdown==3.0.1
+markupsafe==1.1.0
+pytz==2018.9
+requests==2.21.0
+uritemplate==3.0.0
+urllib3==1.24.1
