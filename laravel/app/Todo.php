@@ -32,4 +32,9 @@ class Todo extends Model
     {
         $this->update(['status' => 'doing']);
     }
+
+    public function markAsDone()
+    {
+        $this->update(['status' => 'done']);
+    }
 }
