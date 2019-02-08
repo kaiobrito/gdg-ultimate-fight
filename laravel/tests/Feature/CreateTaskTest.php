@@ -49,8 +49,15 @@ class CreateTaskTest extends TestCase
                 'title',
                 'description',
                 'status',
+                'assignees' => [
+                    '*' => [
+                        'id',
+                        'name',
+                    ],
+                ],
             ],
         ]);
+        $response->assertJsonCount(1, 'data.assignees');
     }
 
     public function testDescriptionIsOptional()

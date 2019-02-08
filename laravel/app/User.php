@@ -45,4 +45,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Task::class, 'task_user');
     }
+
+    public function createTask(array $taskParams): Task
+    {
+        $task = $this->tasks()->create($taskParams);
+
+        $this->assignedTasks()->save($task);
+
+        return $task;
+    }
 }

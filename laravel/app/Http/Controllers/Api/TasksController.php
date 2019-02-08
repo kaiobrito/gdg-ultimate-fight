@@ -37,7 +37,7 @@ class TasksController extends Controller
             'status' => ['nullable', 'string', 'in:todo,doing,done'],
         ]);
 
-        $task = $request->user()->tasks()->create([
+        $task = $request->user()->createTask([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'status' => $request->input('status') ?: 'todo',
