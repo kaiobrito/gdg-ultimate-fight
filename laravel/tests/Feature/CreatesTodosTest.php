@@ -98,10 +98,52 @@ class CreatesTodosTest extends TestCase
 
     public function testCanCreateTodosInDoingStatus()
     {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson(route('todos.store'), $this->validParams([
+                'status' => 'doing',
+            ]));
+
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'title',
+                'description',
+                'status',
+            ],
+        ]);
+        $response->assertJson([
+            'data' => [
+                'status' => 'doing',
+            ],
+        ]);
     }
 
     public function testCanCreateTodoInDoneStatus()
     {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson(route('todos.store'), $this->validParams([
+                'status' => 'done',
+            ]));
+
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'title',
+                'description',
+                'status',
+            ],
+        ]);
+        $response->assertJson([
+            'data' => [
+                'status' => 'done',
+            ],
+        ]);
     }
 
     private function validParams(array $overrides = []): array
