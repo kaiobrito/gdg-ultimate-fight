@@ -74,4 +74,31 @@ class UpdateTodoTest extends TestCase
             ],
         ]);
     }
+
+    public function testCannotUpdateStatusOfTodo()
+    {
+        $todo = factory(Todo::class)->create([
+            'status' => 'todo',
+        ]);
+
+        $newTitle = $this->faker->sentence;
+        $newDescription = null;
+
+        $response = $this->actingAs($todo->user, 'api')
+            ->putJson(route('todos.update', $todo), [
+                'title' => $newTitle,
+                'description' => $newDescription,
+                'status' => 'doing',
+            ]);
+
+        $response->assertOk();
+        $response->assertJson([
+            'data' => [
+                'id' => $todo->id,
+                'title' => $newTitle,
+                'description' => $newDescription,
+                'status' => 'todo',
+            ],
+        ]);
+    }
 }
