@@ -19,4 +19,5 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::resource('todos', 'Api\\TodosController', ['only' => ['index', 'store']]);
+    Route::resource('todos.assignees', 'Api\\TodoAssigneesController', ['only' => ['store']]);
 });
