@@ -18,7 +18,7 @@ class AssignUsersToTodoTest extends TestCase
         $todo = factory(Todo::class)->create();
 
         $response = $this->postJson(route('todos.assignees.store', [$todo]), [
-            'user_ids' => [$assignee->id],
+            'user_id' => $assignee->id,
         ]);
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -30,12 +30,12 @@ class AssignUsersToTodoTest extends TestCase
 
         $response = $this->actingAs($todo->user, 'api')
             ->postJson(route('todos.assignees.store', [$todo]), [
-                'user_ids' => [123123123],
+                'user_id' => 123123123,
             ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $response->assertJsonValidationErrors([
-            'user_ids',
+            'user_id',
         ]);
     }
 
@@ -46,7 +46,7 @@ class AssignUsersToTodoTest extends TestCase
 
         $response = $this->actingAs($todo->user, 'api')
             ->postJson(route('todos.assignees.store', [$todo]), [
-                'user_ids' => [$assignee->id],
+                'user_id' => $assignee->id,
             ]);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -64,34 +64,6 @@ class AssignUsersToTodoTest extends TestCase
                 ],
             ],
         ]);
-    }
-
-    public function testCanAssignMultipleUsersAtOnce()
-    {
-        $todo = factory(Todo::class)->create();
-        $assignees = factory(User::class, 4)->create();
-
-        $response = $this->actingAs($todo->user, 'api')
-            ->postJson(route('todos.assignees.store', [$todo]), [
-                'user_ids' => $assignees->pluck('id')->all(),
-            ]);
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonStructure([
-            'data' => [
-                'id',
-                'title',
-                'description',
-                'status',
-                'assignees' => [
-                    '*' => [
-                        'id',
-                        'name',
-                    ],
-                ],
-            ],
-        ]);
-        $response->assertJsonCount($assignees->count(), 'data.assignees');
     }
 
     public function testRemoveAssignedUsers()
