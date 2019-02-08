@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Notifications\TodoDone;
 use App\Notifications\TodoMoved;
 use App\Todo;
 use App\User;
@@ -41,9 +42,13 @@ class TransitionTodoStatusTest extends TestCase
 
     public function testCanMoveTodoToDoneStatus()
     {
+        $notifications = Notification::fake();
+
         $todo = factory(Todo::class)->create([
             'status' => 'doing',
         ]);
+        $assignees = factory(User::class, 2)->create();
+        $todo->assignees()->sync($assignees);
 
         $response = $this->actingAs($todo->user, 'api')
             ->postJson(route('todos.done-todos.store', $todo));
@@ -55,6 +60,10 @@ class TransitionTodoStatusTest extends TestCase
                 'status' => 'done',
             ],
         ]);
+
+        $notifications->assertSentTo($assignees, TodoDone::class, function (TodoDone $notification) use ($todo) {
+            return $notification->todo->is($todo);
+        });
     }
 
     public function testCanTransitionTodoBackToTodo()

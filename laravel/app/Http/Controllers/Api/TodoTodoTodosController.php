@@ -17,6 +17,6 @@ class TodoTodoTodosController extends Controller
             $assignee->notify(new TodoMoved($todo));
         }
 
-        return new TodoResource($todo->load('assignees'));
+        return new TodoResource($todo);
     }
 }
