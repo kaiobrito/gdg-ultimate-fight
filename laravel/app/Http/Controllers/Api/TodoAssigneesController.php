@@ -11,6 +11,13 @@ use App\Http\Controllers\Controller;
 
 class TodoAssigneesController extends Controller
 {
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Todo $todo
+     *
+     * @return \App\Http\Resources\TodoResource
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request, Todo $todo)
     {
         $this->validate($request, [
@@ -20,9 +27,9 @@ class TodoAssigneesController extends Controller
             ],
         ]);
 
-        $assignees = $request->input('user_ids');
+        $assigneeId = $request->input('user_id');
 
-        $todo->assignees()->sync($assignees);
+        $todo->assignees()->syncWithoutDetaching($assigneeId);
 
         return new TodoResource($todo->load('assignees'));
     }

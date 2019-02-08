@@ -50,6 +50,7 @@ class AssignUsersToTodoTest extends TestCase
             ]);
 
         $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonCount(1, 'data.assignees');
         $response->assertJsonStructure([
             'data' => [
                 'id',
