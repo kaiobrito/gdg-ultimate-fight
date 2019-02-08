@@ -94,16 +94,14 @@ class AssignUsersToTodoTest extends TestCase
         $response->assertJsonCount($assignees->count(), 'data.assignees');
     }
 
-    public function testCanRemoveAllAssigneesFromTodo()
+    public function testRemoveAssignedUsers()
     {
         $todo = factory(Todo::class)->create();
         $assignees = factory(User::class, 4)->create();
         $todo->assignees()->sync($assignees);
 
         $response = $this->actingAs($todo->user, 'api')
-            ->postJson(route('todos.assignees.store', [$todo]), [
-                'user_ids' => [],
-            ]);
+            ->deleteJson(route('todos.assignees.destroy', [$todo, $assignees->first()]));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -115,6 +113,6 @@ class AssignUsersToTodoTest extends TestCase
                 'assignees',
             ],
         ]);
-        $response->assertJsonCount(0, 'data.assignees');
+        $response->assertJsonCount($assignees->count() - 1, 'data.assignees');
     }
 }

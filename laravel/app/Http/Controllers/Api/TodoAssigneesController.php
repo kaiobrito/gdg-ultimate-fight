@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Todo;
+use App\User;
 use App\Rules\ExistsIn;
 use Illuminate\Http\Request;
 use App\Http\Resources\TodoResource;
@@ -24,6 +25,13 @@ class TodoAssigneesController extends Controller
         $assignees = $request->input('user_ids');
 
         $todo->assignees()->sync($assignees);
+
+        return new TodoResource($todo->load('assignees'));
+    }
+
+    public function destroy(Todo $todo, User $assignee)
+    {
+        $todo->removeAssignee($assignee);
 
         return new TodoResource($todo->load('assignees'));
     }

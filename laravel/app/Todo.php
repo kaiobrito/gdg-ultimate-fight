@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Attributes
@@ -23,7 +24,7 @@ class Todo extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function assignees()
+    public function assignees(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
             ->withTimestamps();
@@ -42,5 +43,11 @@ class Todo extends Model
     public function markAsTodo()
     {
         $this->update(['status' => 'todo']);
+    }
+
+    public function removeAssignee(User $user): void
+    {
+        $this->assignees()
+            ->detach($user->getKey());
     }
 }
