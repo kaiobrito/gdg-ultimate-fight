@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use Tests\TestCase;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,6 +24,19 @@ class CreatesTodosTest extends TestCase
 
     public function testTodoTitleIsRequired()
     {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson(route('todos.store'), [
+                'title' => null,
+                'description' => 'Go to the store and buy some milk.',
+                'status' => 'todo',
+            ]);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonValidationErrors([
+            'title'
+        ]);
     }
 
     public function testCreatesTodo()
