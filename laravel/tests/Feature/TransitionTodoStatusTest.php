@@ -6,7 +6,7 @@ use App\Todo;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class TransitionTodoToDoingTest extends TestCase
+class TransitionTodoStatusTest extends TestCase
 {
     use RefreshDatabase;
 
