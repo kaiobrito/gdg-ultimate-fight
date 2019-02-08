@@ -18,5 +18,5 @@ Route::middleware('auth:api')->group(function () {
         return $request->user();
     });
 
-    Route::resource('todos', 'Api\\TodosController', ['only' => ['store']]);
+    Route::resource('todos', 'Api\\TodosController', ['only' => ['index', 'store']]);
 });

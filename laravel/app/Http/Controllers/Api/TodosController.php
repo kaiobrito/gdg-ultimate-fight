@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\TodoResource;
 use Illuminate\Http\Request;
+use App\Http\Resources\TodoResource;
 use App\Http\Controllers\Controller;
 
 class TodosController extends Controller
@@ -11,11 +11,14 @@ class TodosController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $todos = $request->user()->todos()->paginate();
+
+        return TodoResource::collection($todos);
     }
 
     /**
