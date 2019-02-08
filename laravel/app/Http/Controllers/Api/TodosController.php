@@ -29,8 +29,8 @@ class TodosController extends Controller
     {
         $params = $this->validate($request, [
             'title' => ['required'],
-            'description' => ['required', 'nullable', 'string'],
-            'status' => ['required', 'nullable', 'string'],
+            'description' => ['nullable', 'string'],
+            'status' => ['nullable', 'string'],
         ]);
 
         $todo = $request->user()->todos()->create($params);

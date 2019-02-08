@@ -53,6 +53,22 @@ class CreatesTodosTest extends TestCase
 
     public function testDescriptionIsOptional()
     {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson(route('todos.store'), $this->validParams([
+                'description' => null,
+            ]));
+
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'title',
+                'description',
+                'status',
+            ],
+        ]);
     }
 
     public function testStatusIsOptionalAndDefaultsToTodo()
