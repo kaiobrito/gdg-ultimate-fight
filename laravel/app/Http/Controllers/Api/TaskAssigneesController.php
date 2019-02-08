@@ -27,9 +27,9 @@ class TaskAssigneesController extends Controller
             ],
         ]);
 
-        $assigneeId = $request->input('user_id');
-
-        $task->assignees()->syncWithoutDetaching($assigneeId);
+        $assignee = User::findOrFail($request->input('user_id'));
+        
+        $task->addAssignee($assignee);
 
         return new TaskResource($task->load('assignees'));
     }

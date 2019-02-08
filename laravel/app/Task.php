@@ -50,4 +50,9 @@ class Task extends Model
         $this->assignees()
             ->detach($user->getKey());
     }
+
+    public function addAssignee(User $assignee)
+    {
+        $this->assignees()->save($assignee);
+    }
 }
