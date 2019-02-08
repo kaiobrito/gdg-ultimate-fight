@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * Attributes
  *
  * @property \App\User $user
+ * @property \App\User[] $assignees
  */
 class Todo extends Model
 {
