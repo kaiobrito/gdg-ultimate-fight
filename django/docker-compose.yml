@@ -6,6 +6,8 @@ services:
       - .env
     networks:
       - db_network
+    ports:
+      - 5432:5432
     volumes:
       - db_volume:/var/lib/postgresql/data
   web:
@@ -28,5 +30,3 @@ networks:
 
 volumes:
   db_volume:
-    external:
-      name: db_volume
