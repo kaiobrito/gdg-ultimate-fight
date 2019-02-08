@@ -14,9 +14,10 @@ class TodoAssigneesController extends Controller
     {
         $this->validate($request, [
             'user_ids' => [
-                'required',
+                'present',
                 'array',
-                new ExistsIn('users', 'id'),
+                (new ExistsIn('users', 'id'))
+                    ->canBeEmpty(),
             ],
         ]);
 

@@ -17,6 +17,8 @@ class ExistsIn implements Rule
      */
     public $column;
 
+    public $allowEmpty = false;
+
     /**
      * Create a new rule instance.
      *
@@ -25,9 +27,15 @@ class ExistsIn implements Rule
      */
     public function __construct(string $table, ?string $column = 'id')
     {
-
         $this->table = $table;
         $this->column = $column;
+    }
+
+    public function canBeEmpty()
+    {
+        $this->allowEmpty = true;
+
+        return $this;
     }
 
     /**
@@ -39,6 +47,10 @@ class ExistsIn implements Rule
      */
     public function passes($attribute, $value)
     {
+        if (empty($value) && $this->allowEmpty) {
+            return true;
+        }
+
         return DB::table($this->table)
             ->whereIn($this->column, $value)
             ->exists();
