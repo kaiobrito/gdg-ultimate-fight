@@ -27,15 +27,19 @@ class TodosController extends Controller
      */
     public function store(Request $request)
     {
-        $params = $this->validate($request, [
+        $this->validate($request, [
             'title' => ['required'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'string'],
         ]);
 
-        $todo = $request->user()->todos()->create($params);
+        $todo = $request->user()->todos()->create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'status' => $request->input('status') ?: 'todo',
+        ]);
 
-        return new TodoResource($todo);
+        return new TodoResource($todo->refresh());
     }
 
     /**

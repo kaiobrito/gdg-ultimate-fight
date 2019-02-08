@@ -73,6 +73,27 @@ class CreatesTodosTest extends TestCase
 
     public function testStatusIsOptionalAndDefaultsToTodo()
     {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson(route('todos.store'), $this->validParams([
+                'status' => null,
+            ]));
+
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'title',
+                'description',
+                'status',
+            ],
+        ]);
+        $response->assertJson([
+            'data' => [
+                'status' => 'todo',
+            ],
+        ]);
     }
 
     public function testCanCreateTodosInDoingStatus()
