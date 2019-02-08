@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Todo;
 use Illuminate\Http\Request;
 use App\Http\Resources\TodoResource;
 use App\Http\Controllers\Controller;
@@ -48,12 +49,20 @@ class TodosController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param \App\Todo $todo
+     * @return \App\Http\Resources\TodoResource
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Todo $todo)
     {
-        //
+        $params = $this->validate($request, [
+            'title' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
+        ]);
+
+        $todo->update($params);
+
+        return new TodoResource($todo->load('assignees'));
     }
 }
