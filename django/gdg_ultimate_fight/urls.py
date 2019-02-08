@@ -20,7 +20,7 @@ from rest_framework.documentation import include_docs_urls
 urlpatterns = [
 
     path('api/', include('rest_framework.urls')),
-    path('api/', include('todo.urls')),
+    path('api/', include('task.urls')),
     path('api/docs', include_docs_urls(title='GDG Ultimate Fight')),
     path('admin/', admin.site.urls),
 ]

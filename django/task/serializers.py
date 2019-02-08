@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Todo
+from .models import Task
 
 
 class UserSerializer(serializers.Serializer):
@@ -9,11 +9,11 @@ class UserSerializer(serializers.Serializer):
     email = serializers.ReadOnlyField()
 
 
-class TodoSerializer(serializers.ModelSerializer):
+class TaskSerializer(serializers.ModelSerializer):
     assignees = UserSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Todo
+        model = Task
         fields = '__all__'
 
 

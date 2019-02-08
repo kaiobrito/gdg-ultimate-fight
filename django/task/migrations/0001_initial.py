@@ -15,15 +15,18 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Todo',
+            name='Task',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid5, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(default=uuid.uuid5,
+                                        primary_key=True, serialize=False)),
                 ('title', models.CharField(db_index=True, max_length=255)),
                 ('body', models.TextField(blank=True, null=True)),
-                ('status', models.CharField(choices=[('TODO', 'todo'), ('DOING', 'Doing'), ('DONE', 'Done')], default='TODO', max_length=5)),
+                ('status', models.CharField(choices=[
+                 ('TODO', 'todo'), ('DOING', 'Doing'), ('DONE', 'Done')], default='TODO', max_length=5)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('assignees', models.ManyToManyField(related_name='todos', to=settings.AUTH_USER_MODEL)),
+                ('assignees', models.ManyToManyField(
+                    related_name='tasks', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
