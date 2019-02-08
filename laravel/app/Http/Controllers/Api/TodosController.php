@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\TodoResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -26,9 +27,15 @@ class TodosController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $params = $this->validate($request, [
             'title' => ['required'],
+            'description' => ['required', 'nullable', 'string'],
+            'status' => ['required', 'nullable', 'string'],
         ]);
+
+        $todo = $request->user()->todos()->create($params);
+
+        return new TodoResource($todo);
     }
 
     /**
