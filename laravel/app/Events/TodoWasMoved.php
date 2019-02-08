@@ -6,7 +6,7 @@ use App\Todo;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class TodoWasMoved
+class TodoWasMoved implements TodoEvent
 {
     use Dispatchable, SerializesModels;
 
@@ -23,5 +23,10 @@ class TodoWasMoved
     public function __construct(Todo $todo)
     {
         $this->todo = $todo;
+    }
+
+    public function getTodo(): Todo
+    {
+        return $this->todo;
     }
 }

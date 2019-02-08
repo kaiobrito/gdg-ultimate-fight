@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\TodoEvent;
 use App\Notifications\TodoMoved;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,13 +14,13 @@ class NotifyAssigneesTodoMoved implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param \App\Events\TodoWasMoved $event
+     * @param \App\Events\TodoEvent $event
      * @return void
      */
-    public function handle($event)
+    public function handle(TodoEvent $event)
     {
-        foreach ($event->todo->assignees as $user) {
-            $user->notify(new TodoMoved($event->todo));
+        foreach ($event->getTodo()->assignees as $user) {
+            $user->notify(new TodoMoved($event->getTodo()));
         }
     }
 }
