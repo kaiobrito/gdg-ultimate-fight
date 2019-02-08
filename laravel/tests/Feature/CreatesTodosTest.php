@@ -5,10 +5,12 @@ namespace Tests\Feature;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Http\Response;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreatesTodosTest extends TestCase
 {
+    use WithFaker;
     use RefreshDatabase;
 
     public function testGuestsCannotCreateTodos()
@@ -143,6 +145,21 @@ class CreatesTodosTest extends TestCase
             'data' => [
                 'status' => 'done',
             ],
+        ]);
+    }
+
+    public function testCannotCreateTodoWithRandomStatus()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson(route('todos.store'), $this->validParams([
+                'status' => $this->faker->word,
+            ]));
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonValidationErrors([
+            'status',
         ]);
     }
 

@@ -30,7 +30,7 @@ class TodosController extends Controller
         $this->validate($request, [
             'title' => ['required'],
             'description' => ['nullable', 'string'],
-            'status' => ['nullable', 'string'],
+            'status' => ['nullable', 'string', 'in:todo,doing,done'],
         ]);
 
         $todo = $request->user()->todos()->create([
