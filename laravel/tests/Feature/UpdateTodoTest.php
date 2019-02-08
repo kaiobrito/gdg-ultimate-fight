@@ -54,5 +54,24 @@ class UpdateTodoTest extends TestCase
 
     public function testDescriptionCanBeNull()
     {
+        $todo = factory(Todo::class)->create();
+
+        $newTitle = $this->faker->sentence;
+        $newDescription = null;
+
+        $response = $this->actingAs($todo->user, 'api')
+            ->putJson(route('todos.update', $todo), [
+                'title' => $newTitle,
+                'description' => $newDescription,
+            ]);
+
+        $response->assertOk();
+        $response->assertJson([
+            'data' => [
+                'id' => $todo->id,
+                'title' => $newTitle,
+                'description' => $newDescription,
+            ],
+        ]);
     }
 }
