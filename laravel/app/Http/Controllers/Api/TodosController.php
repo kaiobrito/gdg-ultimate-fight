@@ -22,7 +22,7 @@ class TodosController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\TodoResource
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
