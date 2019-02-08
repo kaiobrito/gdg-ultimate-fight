@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Todo;
-use App\Notifications\TodoMoved;
+use App\Events\TodoWasMoved;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TodoResource;
 
@@ -13,10 +13,7 @@ class TodoDoingTodosController extends Controller
     {
         $todo->markAsDoing();
 
-        /** @var \App\User $assignee */
-        foreach ($todo->assignees as $assignee) {
-            $assignee->notify(new TodoMoved($todo));
-        }
+        event(new TodoWasMoved($todo));
 
         return new TodoResource($todo);
     }
