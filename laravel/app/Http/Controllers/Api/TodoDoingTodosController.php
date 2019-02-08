@@ -15,6 +15,6 @@ class TodoDoingTodosController extends Controller
 
         event(new TodoWasMoved($todo));
 
-        return new TodoResource($todo);
+        return new TodoResource($todo->load('assignees'));
     }
 }
