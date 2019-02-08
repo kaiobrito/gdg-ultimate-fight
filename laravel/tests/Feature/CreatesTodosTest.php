@@ -13,11 +13,7 @@ class CreatesTodosTest extends TestCase
 
     public function testGuestsCannotCreateTodos()
     {
-        $response = $this->postJson(route('todos.store'), [
-            'title' => 'Get Milk',
-            'description' => 'Go to the store and buy some milk.',
-            'status' => 'todo',
-        ]);
+        $response = $this->postJson(route('todos.store'), $this->validParams());
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -27,11 +23,9 @@ class CreatesTodosTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), [
+            ->postJson(route('todos.store'), $this->validParams([
                 'title' => null,
-                'description' => 'Go to the store and buy some milk.',
-                'status' => 'todo',
-            ]);
+            ]));
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $response->assertJsonValidationErrors([
@@ -44,11 +38,7 @@ class CreatesTodosTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), [
-                'title' => 'Get Milk',
-                'description' => 'Go to the store and buy some milk.',
-                'status' => 'todo',
-            ]);
+            ->postJson(route('todos.store'), $this->validParams());
 
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
@@ -56,7 +46,7 @@ class CreatesTodosTest extends TestCase
                 'id',
                 'title',
                 'description',
-                'status',   
+                'status',
             ],
         ]);
     }
@@ -75,5 +65,14 @@ class CreatesTodosTest extends TestCase
 
     public function testCanCreateTodoInDoneStatus()
     {
+    }
+
+    private function validParams(array $overrides = []): array
+    {
+        return array_replace([
+            'title' => 'Get Milk',
+            'description' => 'Go to the store and buy some milk.',
+            'status' => 'todo',
+        ], $overrides);
     }
 }
