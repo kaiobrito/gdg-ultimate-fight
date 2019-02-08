@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\TodoWasDone;
 use App\Events\TodoWasMoved;
+use App\Listeners\CongratsAssigneesOfDoneTodo;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\NotifyAssigneesTodoMoved;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         TodoWasMoved::class => [
             NotifyAssigneesTodoMoved::class,
+        ],
+        TodoWasDone::class => [
+            CongratsAssigneesOfDoneTodo::class,
         ],
     ];
 
