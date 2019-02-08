@@ -4,6 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Attributes
+ *
+ * @property \App\User $user
+ */
 class Todo extends Model
 {
     protected $fillable = [
@@ -11,4 +16,9 @@ class Todo extends Model
         'description',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -18,7 +18,7 @@ class AssignUsersToTodoTest extends TestCase
         $todo = factory(Todo::class)->create();
 
         $response = $this->postJson(route('todos.assignees.store', [$todo]), [
-            'users' => [$assignee->id],
+            'user_ids' => [$assignee->id],
         ]);
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -26,6 +26,17 @@ class AssignUsersToTodoTest extends TestCase
 
     public function testUsersMustExistToBeAssigned()
     {
+        $todo = factory(Todo::class)->create();
+
+        $response = $this->actingAs($todo->user, 'api')
+            ->postJson(route('todos.assignees.store', [$todo]), [
+                'user_ids' => [123123123],
+            ]);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonValidationErrors([
+            'user_ids',
+        ]);
     }
 
     public function testCanAssignUsersToTodos()
