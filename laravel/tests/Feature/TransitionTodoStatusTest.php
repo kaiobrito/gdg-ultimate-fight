@@ -45,4 +45,22 @@ class TransitionTodoStatusTest extends TestCase
             ],
         ]);
     }
+
+    public function testCanTransitionTodoBackToTodo()
+    {
+        $todo = factory(Todo::class)->create([
+            'status' => 'doing',
+        ]);
+
+        $response = $this->actingAs($todo->user, 'api')
+            ->postJson(route('todos.todo-todos.store', $todo));
+
+        $response->assertOk();
+        $response->assertJson([
+            'data' => [
+                'id' => $todo->id,
+                'status' => 'todo',
+            ],
+        ]);
+    }
 }

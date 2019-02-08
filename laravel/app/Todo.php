@@ -37,4 +37,9 @@ class Todo extends Model
     {
         $this->update(['status' => 'done']);
     }
+
+    public function markAsTodo()
+    {
+        $this->update(['status' => 'todo']);
+    }
 }
