@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreatesTodosTest extends TestCase
@@ -12,6 +12,13 @@ class CreatesTodosTest extends TestCase
 
     public function testGuestsCannotCreateTodos()
     {
+        $response = $this->postJson(route('todos.store'), [
+            'title' => 'Get Milk',
+            'description' => 'Go to the store and buy some milk.',
+            'status' => 'todo',
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testTodoTitleIsRequired()
