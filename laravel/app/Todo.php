@@ -27,4 +27,9 @@ class Todo extends Model
         return $this->belongsToMany(User::class)
             ->withTimestamps();
     }
+
+    public function markAsDoing()
+    {
+        $this->update(['status' => 'doing']);
+    }
 }
