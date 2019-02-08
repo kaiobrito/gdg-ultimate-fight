@@ -34,11 +34,9 @@ class TransitionTodoStatusTest extends TestCase
             ],
         ]);
 
-        foreach ($assignees as $assignee) {
-            $notifications->assertSentTo($assignee, TodoMoved::class, function (TodoMoved $notification) use ($todo) {
-                return $notification->todo->is($todo);
-            });
-        }
+        $notifications->assertSentTo($assignees, TodoMoved::class, function (TodoMoved $notification) use ($todo) {
+            return $notification->todo->is($todo);
+        });
     }
 
     public function testCanMoveTodoToDoneStatus()
@@ -61,9 +59,13 @@ class TransitionTodoStatusTest extends TestCase
 
     public function testCanTransitionTodoBackToTodo()
     {
+        $notifications = Notification::fake();
+
         $todo = factory(Todo::class)->create([
             'status' => 'doing',
         ]);
+        $assignees = factory(User::class, 2)->create();
+        $todo->assignees()->sync($assignees);
 
         $response = $this->actingAs($todo->user, 'api')
             ->postJson(route('todos.todo-todos.store', $todo));
@@ -75,5 +77,9 @@ class TransitionTodoStatusTest extends TestCase
                 'status' => 'todo',
             ],
         ]);
+
+        $notifications->assertSentTo($assignees, TodoMoved::class, function (TodoMoved $notification) use ($todo) {
+            return $notification->todo->is($todo);
+        });
     }
 }
