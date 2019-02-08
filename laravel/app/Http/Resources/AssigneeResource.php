@@ -4,7 +4,10 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TodoResource extends JsonResource
+/**
+ * @property \App\User $resource
+ */
+class AssigneeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +19,7 @@ class TodoResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'title' => $this->resource->title,
-            'description' => $this->resource->description,
-            'status' => $this->resource->status,
-            'assignees' => AssigneeResource::collection($this->resource->assignees),
+            'name' => $this->resource->name,
         ];
     }
 }

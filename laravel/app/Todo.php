@@ -21,4 +21,10 @@ class Todo extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function assignees()
+    {
+        return $this->belongsToMany(User::class)
+            ->withTimestamps();
+    }
 }

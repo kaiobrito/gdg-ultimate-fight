@@ -41,6 +41,29 @@ class AssignUsersToTodoTest extends TestCase
 
     public function testCanAssignUsersToTodos()
     {
+        $todo = factory(Todo::class)->create();
+        $assignee = factory(User::class)->create();
+
+        $response = $this->actingAs($todo->user, 'api')
+            ->postJson(route('todos.assignees.store', [$todo]), [
+                'user_ids' => [$assignee->id],
+            ]);
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'title',
+                'description',
+                'status',
+                'assignees' => [
+                    '*' => [
+                        'id',
+                        'name',
+                    ],
+                ],
+            ],
+        ]);
     }
 
     public function testCanAssignMultipleUsersAtOnce()
