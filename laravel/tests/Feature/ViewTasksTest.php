@@ -12,12 +12,13 @@ class ViewTasksTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testUsersCanSeeTheirTasks()
+    public function testUsersCanSeeTasksTheirAreAssignedTo()
     {
+        /** @var User $user */
         $user = factory(User::class)->create();
-        $tasks = factory(Task::class, 3)->create([
-            'user_id' => $user->id,
-        ]);
+        $tasks = factory(Task::class, 3)->create();
+
+        $user->assignedTasks()->sync($tasks);
 
         // create todos for some other user.
         factory(Task::class, 4)->create();

@@ -17,7 +17,7 @@ class TasksController extends Controller
      */
     public function index(Request $request)
     {
-        $tasks = $request->user()->tasks()->paginate();
+        $tasks = $request->user()->assignedTasks()->paginate();
 
         return TaskResource::collection($tasks);
     }
