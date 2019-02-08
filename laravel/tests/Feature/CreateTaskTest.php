@@ -8,14 +8,14 @@ use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CreatesTodosTest extends TestCase
+class CreateTaskTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
 
-    public function testGuestsCannotCreateTodos()
+    public function testGuestsCannotCreateTasks()
     {
-        $response = $this->postJson(route('todos.store'), $this->validParams());
+        $response = $this->postJson(route('tasks.store'), $this->validParams());
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
@@ -25,7 +25,7 @@ class CreatesTodosTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), $this->validParams([
+            ->postJson(route('tasks.store'), $this->validParams([
                 'title' => null,
             ]));
 
@@ -35,12 +35,12 @@ class CreatesTodosTest extends TestCase
         ]);
     }
 
-    public function testCreatesTodo()
+    public function testCreatesTask()
     {
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), $this->validParams());
+            ->postJson(route('tasks.store'), $this->validParams());
 
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
@@ -58,7 +58,7 @@ class CreatesTodosTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), $this->validParams([
+            ->postJson(route('tasks.store'), $this->validParams([
                 'description' => null,
             ]));
 
@@ -73,12 +73,12 @@ class CreatesTodosTest extends TestCase
         ]);
     }
 
-    public function testStatusIsOptionalAndDefaultsToTodo()
+    public function testStatusIsOptionalAndDefaultsToTask()
     {
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), $this->validParams([
+            ->postJson(route('tasks.store'), $this->validParams([
                 'status' => null,
             ]));
 
@@ -98,12 +98,12 @@ class CreatesTodosTest extends TestCase
         ]);
     }
 
-    public function testCanCreateTodosInDoingStatus()
+    public function testCanCreateTasksInDoingStatus()
     {
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), $this->validParams([
+            ->postJson(route('tasks.store'), $this->validParams([
                 'status' => 'doing',
             ]));
 
@@ -123,12 +123,12 @@ class CreatesTodosTest extends TestCase
         ]);
     }
 
-    public function testCanCreateTodoInDoneStatus()
+    public function testCanCreateTaskInDoneStatus()
     {
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), $this->validParams([
+            ->postJson(route('tasks.store'), $this->validParams([
                 'status' => 'done',
             ]));
 
@@ -148,12 +148,12 @@ class CreatesTodosTest extends TestCase
         ]);
     }
 
-    public function testCannotCreateTodoWithRandomStatus()
+    public function testCannotCreateTaskWithRandomStatus()
     {
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('todos.store'), $this->validParams([
+            ->postJson(route('tasks.store'), $this->validParams([
                 'status' => $this->faker->word,
             ]));
 

@@ -2,26 +2,26 @@
 
 namespace Tests\Feature;
 
-use App\Todo;
+use App\Task;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UpdateTodoTest extends TestCase
+class UpdateTaskTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
 
     public function testCanUpdateTitleAndPermission()
     {
-        $todo = factory(Todo::class)->create();
+        $task = factory(Task::class)->create();
 
         $newTitle = $this->faker->sentence;
         $newDescription = $this->faker->paragraph;
 
-        $response = $this->actingAs($todo->user, 'api')
-            ->putJson(route('todos.update', $todo), [
+        $response = $this->actingAs($task->user, 'api')
+            ->putJson(route('tasks.update', $task), [
                 'title' => $newTitle,
                 'description' => $newDescription,
             ]);
@@ -29,7 +29,7 @@ class UpdateTodoTest extends TestCase
         $response->assertOk();
         $response->assertJson([
             'data' => [
-                'id' => $todo->id,
+                'id' => $task->id,
                 'title' => $newTitle,
                 'description' => $newDescription,
             ],
@@ -38,10 +38,10 @@ class UpdateTodoTest extends TestCase
 
     public function testTitleIsRequired()
     {
-        $todo = factory(Todo::class)->create();
+        $task = factory(Task::class)->create();
 
-        $response = $this->actingAs($todo->user, 'api')
-            ->putJson(route('todos.update', $todo), [
+        $response = $this->actingAs($task->user, 'api')
+            ->putJson(route('tasks.update', $task), [
                 'title' => null,
                 'description' => $this->faker->paragraph,
             ]);
@@ -54,13 +54,13 @@ class UpdateTodoTest extends TestCase
 
     public function testDescriptionCanBeNull()
     {
-        $todo = factory(Todo::class)->create();
+        $task = factory(Task::class)->create();
 
         $newTitle = $this->faker->sentence;
         $newDescription = null;
 
-        $response = $this->actingAs($todo->user, 'api')
-            ->putJson(route('todos.update', $todo), [
+        $response = $this->actingAs($task->user, 'api')
+            ->putJson(route('tasks.update', $task), [
                 'title' => $newTitle,
                 'description' => $newDescription,
             ]);
@@ -68,24 +68,24 @@ class UpdateTodoTest extends TestCase
         $response->assertOk();
         $response->assertJson([
             'data' => [
-                'id' => $todo->id,
+                'id' => $task->id,
                 'title' => $newTitle,
                 'description' => $newDescription,
             ],
         ]);
     }
 
-    public function testCannotUpdateStatusOfTodo()
+    public function testCannotUpdateStatusOfTask()
     {
-        $todo = factory(Todo::class)->create([
+        $task = factory(Task::class)->create([
             'status' => 'todo',
         ]);
 
         $newTitle = $this->faker->sentence;
         $newDescription = null;
 
-        $response = $this->actingAs($todo->user, 'api')
-            ->putJson(route('todos.update', $todo), [
+        $response = $this->actingAs($task->user, 'api')
+            ->putJson(route('tasks.update', $task), [
                 'title' => $newTitle,
                 'description' => $newDescription,
                 'status' => 'doing',
@@ -94,7 +94,7 @@ class UpdateTodoTest extends TestCase
         $response->assertOk();
         $response->assertJson([
             'data' => [
-                'id' => $todo->id,
+                'id' => $task->id,
                 'title' => $newTitle,
                 'description' => $newDescription,
                 'status' => 'todo',

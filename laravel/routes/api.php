@@ -18,9 +18,9 @@ Route::middleware('auth:api')->group(function () {
         return $request->user();
     });
 
-    Route::resource('todos', 'Api\\TodosController', ['only' => ['index', 'store', 'update']]);
-    Route::resource('todos.assignees', 'Api\\TodoAssigneesController', ['only' => ['store', 'destroy']]);
-    Route::resource('todos.doing-todos', 'Api\\TodoDoingTodosController', ['only' => ['store']]);
-    Route::resource('todos.done-todos', 'Api\\TodoDoneTodosController', ['only' => ['store']]);
-    Route::resource('todos.todo-todos', 'Api\\TodoTodoTodosController', ['only' => ['store']]);
+    Route::resource('tasks', 'Api\\TasksController', ['only' => ['index', 'store', 'update']]);
+    Route::resource('tasks.assignees', 'Api\\TaskAssigneesController', ['only' => ['store', 'destroy']]);
+    Route::resource('tasks.doing', 'Api\\TaskDoingController', ['only' => ['store']]);
+    Route::resource('tasks.done', 'Api\\TaskDoneController', ['only' => ['store']]);
+    Route::resource('tasks.todo', 'Api\\TaskTodoController', ['only' => ['store']]);
 });

@@ -2,31 +2,31 @@
 
 namespace App\Events;
 
-use App\Todo;
+use App\Task;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class TodoWasMoved implements TodoEvent
+class TaskWasDone implements TaskEvent
 {
     use Dispatchable, SerializesModels;
 
     /**
-     * @var \App\Todo
+     * @var \App\Task
      */
-    public $todo;
+    public $task;
 
     /**
      * Create a new event instance.
      *
-     * @param \App\Todo $todo
+     * @param \App\Task $task
      */
-    public function __construct(Todo $todo)
+    public function __construct(Task $task)
     {
-        $this->todo = $todo;
+        $this->task = $task;
     }
 
-    public function getTodo(): Todo
+    public function getTask(): Task
     {
-        return $this->todo;
+        return $this->task;
     }
 }

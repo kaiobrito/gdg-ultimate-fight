@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Events\TodoWasDone;
-use App\Events\TodoWasMoved;
-use App\Listeners\CongratsAssigneesOfDoneTodo;
+use App\Events\TaskWasDone;
+use App\Events\TaskWasMoved;
 use Illuminate\Auth\Events\Registered;
-use App\Listeners\NotifyAssigneesTodoMoved;
+use App\Listeners\NotifyAssigneesOfTaskMoved;
+use App\Listeners\CongratsAssigneesOfDoneTask;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -21,11 +21,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        TodoWasMoved::class => [
-            NotifyAssigneesTodoMoved::class,
+        TaskWasMoved::class => [
+            NotifyAssigneesOfTaskMoved::class,
         ],
-        TodoWasDone::class => [
-            CongratsAssigneesOfDoneTodo::class,
+        TaskWasDone::class => [
+            CongratsAssigneesOfDoneTask::class,
         ],
     ];
 

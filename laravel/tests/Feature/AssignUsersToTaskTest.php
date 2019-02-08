@@ -2,22 +2,22 @@
 
 namespace Tests\Feature;
 
-use App\Todo;
+use App\Task;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AssignUsersToTodoTest extends TestCase
+class AssignUsersToTaskTest extends TestCase
 {
     use RefreshDatabase;
 
     public function testGuestsCannotAssignUsersToAnything()
     {
         $assignee = factory(User::class)->create();
-        $todo = factory(Todo::class)->create();
+        $todo = factory(Task::class)->create();
 
-        $response = $this->postJson(route('todos.assignees.store', [$todo]), [
+        $response = $this->postJson(route('tasks.assignees.store', [$todo]), [
             'user_id' => $assignee->id,
         ]);
 
@@ -26,10 +26,10 @@ class AssignUsersToTodoTest extends TestCase
 
     public function testUsersMustExistToBeAssigned()
     {
-        $todo = factory(Todo::class)->create();
+        $todo = factory(Task::class)->create();
 
         $response = $this->actingAs($todo->user, 'api')
-            ->postJson(route('todos.assignees.store', [$todo]), [
+            ->postJson(route('tasks.assignees.store', [$todo]), [
                 'user_id' => 123123123,
             ]);
 
@@ -41,11 +41,11 @@ class AssignUsersToTodoTest extends TestCase
 
     public function testCanAssignUsersToTodos()
     {
-        $todo = factory(Todo::class)->create();
+        $todo = factory(Task::class)->create();
         $assignee = factory(User::class)->create();
 
         $response = $this->actingAs($todo->user, 'api')
-            ->postJson(route('todos.assignees.store', [$todo]), [
+            ->postJson(route('tasks.assignees.store', [$todo]), [
                 'user_id' => $assignee->id,
             ]);
 
@@ -69,12 +69,12 @@ class AssignUsersToTodoTest extends TestCase
 
     public function testRemoveAssignedUsers()
     {
-        $todo = factory(Todo::class)->create();
+        $todo = factory(Task::class)->create();
         $assignees = factory(User::class, 4)->create();
         $todo->assignees()->sync($assignees);
 
         $response = $this->actingAs($todo->user, 'api')
-            ->deleteJson(route('todos.assignees.destroy', [$todo, $assignees->first()]));
+            ->deleteJson(route('tasks.assignees.destroy', [$todo, $assignees->first()]));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([

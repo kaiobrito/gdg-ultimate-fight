@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property \App\User $user
  * @property \App\User[] $assignees
  */
-class Todo extends Model
+class Task extends Model
 {
     protected $fillable = [
         'title',

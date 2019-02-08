@@ -2,29 +2,29 @@
 
 namespace App\Notifications;
 
-use App\Todo;
+use App\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class TodoMoved extends Notification implements ShouldQueue
+class TaskMoved extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * @var \App\Todo
+     * @var \App\Task
      */
-    public $todo;
+    public $task;
 
     /**
      * Create a new notification instance.
      *
-     * @param \App\Todo $todo
+     * @param \App\Task $task
      */
-    public function __construct(Todo $todo)
+    public function __construct(Task $task)
     {
-        $this->todo = $todo;
+        $this->task = $task;
     }
 
     /**
@@ -47,7 +47,7 @@ class TodoMoved extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Todo moved')
-            ->line(sprintf('Your todo is now in the %s pile.', $this->todo->status));
+            ->subject('Task moved')
+            ->line(sprintf('Your task is now in the %s pile.', $this->task->status));
     }
 }

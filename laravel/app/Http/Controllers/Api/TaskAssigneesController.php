@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Todo;
+use App\Task;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Http\Resources\TodoResource;
+use App\Http\Resources\TaskResource;
 use App\Http\Controllers\Controller;
 
-class TodoAssigneesController extends Controller
+class TaskAssigneesController extends Controller
 {
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Todo $todo
+     * @param \App\Task $task
      *
-     * @return \App\Http\Resources\TodoResource
+     * @return \App\Http\Resources\TaskResource
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request, Todo $todo)
+    public function store(Request $request, Task $task)
     {
         $this->validate($request, [
             'user_id' => [
@@ -29,15 +29,15 @@ class TodoAssigneesController extends Controller
 
         $assigneeId = $request->input('user_id');
 
-        $todo->assignees()->syncWithoutDetaching($assigneeId);
+        $task->assignees()->syncWithoutDetaching($assigneeId);
 
-        return new TodoResource($todo->load('assignees'));
+        return new TaskResource($task->load('assignees'));
     }
 
-    public function destroy(Todo $todo, User $assignee)
+    public function destroy(Task $task, User $assignee)
     {
-        $todo->removeAssignee($assignee);
+        $task->removeAssignee($assignee);
 
-        return new TodoResource($todo->load('assignees'));
+        return new TaskResource($task->load('assignees'));
     }
 }

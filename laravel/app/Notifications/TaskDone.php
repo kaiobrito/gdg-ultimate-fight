@@ -2,27 +2,27 @@
 
 namespace App\Notifications;
 
-use App\Todo;
+use App\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class TodoDone extends Notification implements ShouldQueue
+class TaskDone extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * @var \App\Todo
+     * @var \App\Task
      */
     public $todo;
 
     /**
      * Create a new notification instance.
      *
-     * @param \App\Todo $todo
+     * @param \App\Task $todo
      */
-    public function __construct(Todo $todo)
+    public function __construct(Task $todo)
     {
         $this->todo = $todo;
     }
@@ -47,7 +47,7 @@ class TodoDone extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Todo Done')
-            ->line('Congratulations! You have completed a todo.');
+            ->subject('Task Done')
+            ->line('Congratulations! You have completed a task.');
     }
 }

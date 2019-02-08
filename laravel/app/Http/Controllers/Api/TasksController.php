@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Todo;
+use App\Task;
 use Illuminate\Http\Request;
-use App\Http\Resources\TodoResource;
+use App\Http\Resources\TaskResource;
 use App\Http\Controllers\Controller;
 
-class TodosController extends Controller
+class TasksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,16 +17,16 @@ class TodosController extends Controller
      */
     public function index(Request $request)
     {
-        $todos = $request->user()->todos()->paginate();
+        $tasks = $request->user()->tasks()->paginate();
 
-        return TodoResource::collection($todos);
+        return TaskResource::collection($tasks);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \App\Http\Resources\TodoResource
+     * @return \App\Http\Resources\TaskResource
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
@@ -37,32 +37,32 @@ class TodosController extends Controller
             'status' => ['nullable', 'string', 'in:todo,doing,done'],
         ]);
 
-        $todo = $request->user()->todos()->create([
+        $task = $request->user()->tasks()->create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'status' => $request->input('status') ?: 'todo',
         ]);
 
-        return new TodoResource($todo->refresh());
+        return new TaskResource($task->refresh());
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param \App\Todo $todo
-     * @return \App\Http\Resources\TodoResource
+     * @param \App\Task $task
+     * @return \App\Http\Resources\TaskResource
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Todo $todo)
+    public function update(Request $request, Task $task)
     {
         $params = $this->validate($request, [
             'title' => ['required', 'string'],
             'description' => ['nullable', 'string'],
         ]);
 
-        $todo->update($params);
+        $task->update($params);
 
-        return new TodoResource($todo->load('assignees'));
+        return new TaskResource($task->load('assignees'));
     }
 }
