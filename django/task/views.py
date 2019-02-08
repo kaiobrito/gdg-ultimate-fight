@@ -8,6 +8,9 @@ from .serializers import TaskSerializer, AssignSerializer
 
 class TaskViewSet(ModelViewSet):
     serializer_class = TaskSerializer
+    filter_fields = ('status', )
+    search_fields = ('title', 'body', 'assignees__username',
+                     'assignees__email')
 
     def get_queryset(self):
         return self.request.user.tasks.all()
