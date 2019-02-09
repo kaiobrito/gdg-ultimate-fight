@@ -1,0 +1,54 @@
+version: '2'
+
+services:
+    app:
+        image: tonysm/gdg-ufc-laravel-app
+        build:
+            dockerfile: ./resources/docker/app/Dockerfile
+            context: .
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: app
+        volumes:
+            - .:/var/www/html
+        ports:
+            - "80:80"
+        networks:
+            - front
+            - back
+    worker:
+        image: tonysm/gdg-ufc-laravel-app
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: queue
+        volumes:
+            - .:/var/www/html
+        networks:
+            - back
+        depends_on:
+            - app
+            - redis
+    db:
+        image: mysql:5.7
+        volumes:
+            - mysqldata:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: "secret"
+            MYSQL_DATABASE: "homestead"
+            MYSQL_USER: "homestead"
+            MYSQL_PASSWORD: "secret"
+        networks:
+            - back
+    redis:
+        image: redis:latest
+        networks:
+            - back
+networks:
+    back:
+        driver: "bridge"
+    front:
+        driver: "bridge"
+
+volumes:
+    mysqldata:
+        driver: "local"
