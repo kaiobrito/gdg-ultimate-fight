@@ -12,6 +12,7 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.7.*",
         "laravel/horizon": "^2.0",
+        "laravel/passport": "^7.1",
         "laravel/tinker": "^1.0"
     },
     "require-dev": {
